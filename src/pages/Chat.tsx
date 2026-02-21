@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Box, Avatar, Typography, Button, IconButton } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useAuth } from "../context/AuthContext";
@@ -56,25 +56,26 @@ const Chat = () => {
   };
 
   useLayoutEffect(() => {
-    if (auth?.isLoggedIn && auth.user) {
-      toast.loading("Loading Chats", { id: "loadchats" });
-      getUserChats()
-        .then((data) => {
-          setChatMessages([...data.chats]);
-          toast.success("Successfully loaded chats", { id: "loadchats" });
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Loading Failed", { id: "loadchats" });
-        });
-    }
-  }, [auth]);
+  if (!auth?.isLoggedIn || !auth.user) return;
 
-  useEffect(() => {
-    if (!auth?.user) {
-      return navigate("/login");
-    }
-  }, [auth]);
+  toast.loading("Loading Chats", { id: "loadchats" });
+
+  getUserChats()
+    .then((data) => {
+      setChatMessages([...data.chats]);
+      toast.success("Successfully loaded chats", { id: "loadchats" });
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error("Loading Failed", { id: "loadchats" });
+    });
+}, [auth]);
+
+useEffect(() => {
+  if (!auth?.user) {
+    navigate("/login");
+  }
+}, [auth, navigate]);   // ← add navigate here
 
   return (
     <Box

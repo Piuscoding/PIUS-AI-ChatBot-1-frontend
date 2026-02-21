@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { IoIosLogIn } from "react-icons/io";
 import { Box, Typography, Button } from "@mui/material";
 import CustomizedInput from "../components/shared/CustomizedInput";
@@ -22,11 +22,11 @@ const Login = () => {
       toast.error("Signing In Failed", { id: "login" });
     }
   };
-  useEffect(() => {
-    if (auth?.user) {
-      return navigate("/chat");
-    }
-  }, [auth]);
+useEffect(() => {
+  if (auth?.user) {
+    navigate("/chat");
+  }
+}, [auth, navigate]);   // added navigate to deps to satisfy react-hooks/exhaustive-deps
   return (
     <Box width={"100%"} height={"100%"} display="flex" flex={1}>
       <Box padding={8} mt={8} display={{ md: "flex", sm: "none", xs: "none" }}>
